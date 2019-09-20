@@ -1,6 +1,5 @@
 N = int(input())
 histogram = list(map(int, input().split(' ')))
-
 stack = []
 maxArea = N
 
@@ -24,7 +23,10 @@ for i in range(0, N):
     stack.append(i)
 
 for i in range(len(stack)-1, -1, -1):
-  tempMax = histogram[stack[i]] * (len(stack) - i)
+  if i == 0:
+    tempMax = histogram[stack[i]] * N
+  else:
+    tempMax = histogram[stack[i]] * (len(stack) - i)
   if tempMax > maxArea:
     maxArea = tempMax
 
