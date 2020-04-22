@@ -1,7 +1,8 @@
 #include <stdio.h>
 #define MAX 102
 #define INF (6*100)
-#define MAXQ (MAX * MAX * 10)
+#define MAXQ (MAX * MAX * 10) //linear queue 일때는 *50~*100 정도 필요
+
 int N, M;
 int costs[MAX][MAX];
 
@@ -12,7 +13,7 @@ struct record {
 };
 record visit[MAX];
 
-int que[MAXQ];
+int que[MAXQ]; //circular queue
 int wp, rp, qsize;
 
 bool empty();
@@ -44,25 +45,18 @@ void initialize() {
     
 }
 
+void printRoute(int idx) {
+    if (idx == 0) return;
+    printRoute(visit[idx].prev);
+    printf("%d ", idx);
+}
+
 void solve() {
-    record ans, temp;
-    int route[MAX];
-    int routeidx = 0;
-    
+    record ans;
     initialize();
     ans = bfs();
-    
-    temp = ans;
-    while (temp.i) {
-        route[routeidx] = temp.i;
-        routeidx++;
-        temp = visit[temp.prev];
-    }
-    
     printf("%d\n", ans.t);
-    for (int i = routeidx-1; i >= 0; i--) {
-        printf("%d ", route[i]);
-    }
+    printRoute(ans.i);
 }
 
 int main() {
