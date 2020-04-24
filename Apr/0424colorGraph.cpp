@@ -34,7 +34,8 @@ int main() {
         }
     }
     
-    done = dfs(0);
+    colored[0] = 1;
+    done = dfs(1);
 
     if (!done) {
         printf("-1");
