@@ -4,31 +4,26 @@
 int N, M;
 int graph[MAX][MAX];
 int colored[MAX];
-bool done;
 
 bool canColor(int n, int c) {
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < n; i++) {
         if (graph[n][i] && colored[i] == c) return false;
     }
     return true;
 }
 
-void dfs(int n) {
-    if (n > N) {
-        done = true;
-        return;
-    }
+int dfs(int n) {
+    if (n > N) return 1;
     for (int i = 1; i <= M; i++) {
-        if (canColor(n, i)) {
-            colored[n] = i;
-            dfs(n+1);
-            if (done) return;
-            colored[n] = 0;
-        }
+        if (!canColor(n, i)) continue;
+        colored[n] = i;
+        if (dfs(n+1)) return 1;
     }
+    return 0;
 }
 
 int main() {
+    int done = 0;
     scanf("%d %d", &N, &M);
     for (int i = 0; i < N; i++) {
         for (int j = 0; j <= i; j++) {
@@ -39,14 +34,14 @@ int main() {
         }
     }
     
-    dfs(0);
+    done = dfs(0);
 
     if (!done) {
         printf("-1");
-        return 0;
-    }
-    for (int i = 0; i < N; i++) {
-        printf("%d ", colored[i]);
+    } else {
+        for (int i = 0; i < N; i++) {
+            printf("%d ", colored[i]);
+        }
     }
     
     return 0;
