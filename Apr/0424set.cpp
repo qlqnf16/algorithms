@@ -10,22 +10,20 @@ int sets[5000][3];
 bool setVisit[MAX];
 
 bool isSet() {
-    int setCheck[4];    // 모양, 숫자, 색, 내부
-    int card1 = checkedCards[0];
-    int card2 = checkedCards[1];
-    int card3 = checkedCards[2];
+    int card1, card2, card3;
     
     for (int i = 0; i < 4; i++) {
-        if (cards[card1][i] == cards[card2][i]) {
-            setCheck[i] = cards[card1][i];
+        card1 = cards[checkedCards[0]][i];
+        card2 = cards[checkedCards[1]][i];
+        card3 = cards[checkedCards[2]][i];
+        
+        if (card1 == card2) {
+            if (card3 != card1) return false;
         } else {
-            setCheck[i] = 6 - cards[card1][i] - cards[card2][i];
+            if (card3 != 6 - card1 - card2) return false;
         }
     }
     
-    for (int i = 0; i < 4; i++) {
-        if (cards[card3][i] != setCheck[i]) return false;
-    }
     return true;
 }
 
@@ -53,20 +51,24 @@ bool isPossible(int n) {
     return true;
 }
 
-void findMaxSets(int s, int n) {
+int findMaxSets(int s, int n) {
     if (n > ans) ans = n;
+    if (n >= N/3) return 1;
+    if (setSize - s < ans) return 0;
 
     for (int i = s; i < setSize; i++) {
         if (!n || isPossible(i)) {
             for (int j = 0; j < 3; j++) {
                 setVisit[sets[i][j]] = true;
             }
-            findMaxSets(i+1, n+1);
+            if (findMaxSets(i+1, n+1)) return 1;
             for (int j = 0; j < 3; j++) {
                 setVisit[sets[i][j]] = false;
             }
         }
     }
+    
+    return 0;
 }
 
 int main() {
@@ -81,3 +83,4 @@ int main() {
     printf("%d", ans);
     return 0;
 }
+
