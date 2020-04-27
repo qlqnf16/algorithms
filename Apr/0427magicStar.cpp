@@ -1,69 +1,80 @@
 #include <stdio.h>
 
-char star[5][10];
-bool visit[12];
-int empty[12][2];
+char map[5][10];
+int C[] = {0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4};
+int R[] = {4, 1, 3, 5, 7, 2, 6, 1, 3, 5, 7, 4};
+int line1[] = {0, 3, 0, 2, 4, 0, 2, 0, 1, 1, 1, 3};
+int line2[] = {2, 5, 5, 5, 5, 3, 4, 1, 3, 4, 2, 4};
+
 int emptyCnt;
-
-int lines[][4][2] = {{{1,1}, {1,3}, {1,5}, {1,7}}, {{3, 1}, {3, 3}, {3, 5}, {3,7}}, {{0,4}, {1, 3}, {2, 2}, {3, 1}}, {{0, 4}, {1,5}, {2,6}, {3,7}}, {{1,1}, {2,2}, {3,3}, {4,4}}, {{4,4}, {3,5}, {2,6}, {1,7}}};
-
-bool isPossible() {
-    int c, r, tempsum;
-    for (int i = 0; i < 6; i++) {
-        tempsum = 0;
-        for (int j = 0; j < 4; j++) {
-            c = lines[i][j][0];
-            r = lines[i][j][1];
-            tempsum += star[c][r] - 'A' + 1;
-        }
-        if (tempsum != 26) return false;
-    }
-    return true;
-}
+int empty[12];
+int used[13];
+int sum[6];
+int sumCnt[6];
 
 int dfs(int n) {
-    if (n >= emptyCnt) {
-        if (isPossible()) return 1;
-        return 0;
-    }
-    int c = empty[n][0];
-    int r = empty[n][1];
+    int c, r, l1, l2, idx;
+    if (n >= emptyCnt) return 1;
     
-    for (int i = 0; i < 12; i++) {
-        if (visit[i]) continue;
-        visit[i] = true;
-        star[c][r] = i + 'A';
+    idx = empty[n];
+    c = C[idx];
+    r = R[idx];
+    l1 = line1[idx];
+    l2 = line2[idx];
+    for (int i = 1; i <= 12; i++) {
+        if (used[i]) continue;
+        if (sumCnt[l1] >= 3) {
+            if (sum[l1] + i != 26) continue;
+        }
+        else {
+            if (sum[l1] + i >= 26) continue;
+        }
+        if (sumCnt[l2] >= 3) {
+            if (sum[l2] + i != 26) continue;
+        }
+        else {
+            if (sum[l2] + i >= 26) continue;
+        }
+        used[i] = 1;
+        sum[l1] += i; sumCnt[l1]++;
+        sum[l2] += i; sumCnt[l2]++;
+        map[c][r] = 'A'+i-1;
         if (dfs(n+1)) return 1;
-        star[c][r] = 'x';
-        visit[i] = false;
-        
+        used[i] = 0;
+        sum[l1] -= i; sumCnt[l1]--;
+        sum[l2] -= i; sumCnt[l2]--;
     }
     return 0;
 }
 
 void solve() {
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 9; j++) {
-            if (star[i][j] == '.') continue;
-            if (star[i][j] == 'x') {
-                empty[emptyCnt][0] = i;
-                empty[emptyCnt][1] = j;
-                emptyCnt++;
-            } else {
-                visit[star[i][j] - 'A'] = true;
-            }
+    int val;
+    for (int i = 0; i < 12; i++) {
+        if (map[C[i]][R[i]] == 'x') {
+            empty[emptyCnt++] = i;
+        } else {
+            val = map[C[i]][R[i]] - 'A' + 1;
+            int l1 = line1[i];
+            int l2 = line2[i];
+            used[val] = 1;
+            sum[l1] += val; sumCnt[l1] ++;
+            sum[l2] += val; sumCnt[l2] ++;
         }
     }
     dfs(0);
 }
 
+void output() {
+    for (int i = 0; i < 5; i++) {
+        printf("%s\n", map[i]);
+    }
+}
+
 int main() {
     for (int i = 0; i < 5; i++) {
-        scanf("%s", star[i]);
+        scanf("%s", map[i]);
     }
     solve();
-    for (int i = 0; i < 5; i++) {
-        printf("%s\n", star[i]);
-    }
+    output();
     return 0;
 }
