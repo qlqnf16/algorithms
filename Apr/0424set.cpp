@@ -53,8 +53,8 @@ bool isPossible(int n) {
 
 int findMaxSets(int s, int n) {
     if (n > ans) ans = n;
-    if (n >= N/3) return 1;
-    if (setSize - s < ans) return 0;
+    if (n >= (N - sets[0][0]) / 3) return 1;
+    if (n + (N - sets[s][0])/3 <= ans) return 0;
 
     for (int i = s; i < setSize; i++) {
         if (!n || isPossible(i)) {
@@ -83,4 +83,3 @@ int main() {
     printf("%d", ans);
     return 0;
 }
-
