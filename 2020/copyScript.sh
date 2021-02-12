@@ -1,2 +1,2 @@
 #!/bin/bash
-cp ~/Learning/c/cprogramming/Algorithm/Algorithm/$1.cpp ~/Learning/algorithms/May/$1$2.cpp
+cp ~/source/repos/Algorithm/Algorithm/Algorithm.cpp ~/Desktop/personal/algorithms/Feb/$1$2.cpp
