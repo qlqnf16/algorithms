@@ -1,0 +1,7 @@
+.vs
+.vscode
+*out
+main.out.dsYM
+sample_input.txt
+main.cpp
+copyScript.sh
