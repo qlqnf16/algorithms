@@ -8,7 +8,6 @@ function solution(n) {
     c = 0,
     d = 0;
   while (num <= maxNum) {
-    console.log(r, c, num);
     if (
       (pyramid[r + dirr[d]] && pyramid[r + dirr[d]][c + dirc[d]]) ||
       (d === 0 && r === n - 1) ||

@@ -2,7 +2,6 @@ function solution(people, limit) {
   let answer = 0;
   const _people = Object.assign([...people]);
   _people.sort((a, b) => a - b);
-  console.log(_people);
 
   let lp = 0;
   let rp = _people.length - 1;
